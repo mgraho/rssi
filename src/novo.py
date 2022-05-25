@@ -29,9 +29,8 @@ class Rssi():
         #name = rospy.get_namespace().strip('/')   
         #print(name)
         index = int(self.config['mapping'].index(name))  
-        result = subprocess.run(['ls'], stdout=subprocess.PIPE)
-        result.stdout
-        print(result)
+        result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
+        print(result.stdout.decode('UTF-8'))
         print(self.A)
         pub = rospy.Publisher("device",Num,queue_size=1)
         
@@ -78,7 +77,7 @@ class MyDiscoverer(bluetooth.DeviceDiscoverer):
         return self.device
     def inquiry_complete(self):
         self.done = True
-        
+       
 if __name__ == '__main__':
     rospy.init_node('pyclass')
     pub = rospy.Publisher("device",Num,queue_size=1)
