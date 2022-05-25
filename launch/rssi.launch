@@ -1,4 +1,5 @@
 <launch>
-	<node pkg="rssi" type="rssi_pub.py" name="rssi_pub" />
+	<node pkg="rssi" type="rssi_pub.py" name="rssi_pub" output="screen" />
 	<node pkg="rssi" type="rssi_sub.py" name="rssi_sub" output="screen"/>
+	<rosparam command="load" file="$(find rssi)/config/config.yaml" param="consensus_params"/>
 </launch>
