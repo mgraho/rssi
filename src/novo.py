@@ -17,10 +17,10 @@ class Rssi():
                 rpix=1
             if data.name.find("rpi2")!=-1:
                 rpix=2
-               # ime=data.name.replace("rpi", "")
-               # name=ime.replace("\nhci0","")
+                #ime=data.name.replace("rpi", "")
+                #name=ime.replace("\nhci0","")
             sender=data.sender.replace("rpi", "")
-           # rpix=int(name)
+            #rpix=int(name)
             senderID=int(sender)
             self.A[senderID][rpix]=data.rssi
         print("A=", self.A)
@@ -30,7 +30,7 @@ class Rssi():
         self.A = [[0, 0, 0],[0, 0, 0],[0, 0, 0]]
         self.rate = rospy.Rate(1) #1 hz 
         self.device = Num()
-        rospy.Subscriber("device",Num, self.callback)
+        #rospy.Subscriber("device",Num, self.callback)
         self.config = rospy.get_param('/consensus_params')
         self.name = rospy.get_namespace().strip('/')   
         print(self.name)
@@ -38,9 +38,9 @@ class Rssi():
       
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
-        #for connected, to in zip(self.config['adjacency'][self.index], self.config['mapping']):
-           # if connected:
-             #   rospy.Subscriber('/{}/value'.format(to), Float32, self.callback, queue_size=3)
+        for connected, to in zip(self.config['adjacency'][self.index], self.config['mapping']):
+            if connected:
+                rospy.Subscriber('/{}/device'.format(to), Num, self.callback, queue_size=3)
         
     def run(self):
         
