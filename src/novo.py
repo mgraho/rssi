@@ -25,9 +25,8 @@ class Rssi():
         self.device = Num()
         rospy.Subscriber("device",Num, self.callback)
         self.config = rospy.get_param('/consensus_params')
-        name ="rpi0"
-        name = rospy.get_namespace().strip('/')   
-        print(name)
+        self.name = rospy.get_namespace().strip('/')   
+        print(self.name)
        # index = int(self.config['mapping'].index(name))  
         #result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
         #print(result.stdout.decode('UTF-8'))
@@ -35,15 +34,12 @@ class Rssi():
         pub = rospy.Publisher("device",Num,queue_size=1)
         
     def run(self):
-        rate = rospy.Rate(10)
+        
         while not rospy.is_shutdown():
-            test=Num()
-            test.name="rpi2"
-            test.rssi=-70
-            test.sender="rpi0"
+
             result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
             result=result.stdout.decode('UTF-8')
-            print(result)
+            #print(result)
             lista = result.split(" ")
             #print(lista)
             device=Num()
@@ -55,7 +51,8 @@ class Rssi():
                     print("tu sam")            
                 if lista[i]=="\nname":
                     device.name=lista[i+1] 
-                    device.sender="rpi1"
+                    device.sender="rpi0"
+                    print(self.name)
                     pub.publish(device)
                     print("tu sam 2")
            # self.d = MyDiscoverer()
@@ -70,7 +67,7 @@ class Rssi():
                     #self.d.process_event()
                     #test = self.d.process_event()
                 #if self.d.done: break
-            rate.sleep()
+            self.rate.sleep()
             
             
 class MyDiscoverer(bluetooth.DeviceDiscoverer):
