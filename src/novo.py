@@ -26,11 +26,11 @@ class Rssi():
         rospy.Subscriber("device",Num, self.callback)
         self.config = rospy.get_param('/consensus_params')
         name ="rpi0"
-        #name = rospy.get_namespace().strip('/')   
-        #print(name)
-        index = int(self.config['mapping'].index(name))  
-        result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
-        print(result.stdout.decode('UTF-8'))
+        name = rospy.get_namespace().strip('/')   
+        print(name)
+       # index = int(self.config['mapping'].index(name))  
+        #result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
+        #print(result.stdout.decode('UTF-8'))
         print(self.A)
         pub = rospy.Publisher("device",Num,queue_size=1)
         
@@ -41,6 +41,23 @@ class Rssi():
             test.name="rpi2"
             test.rssi=-70
             test.sender="rpi0"
+            result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
+            result=result.stdout.decode('UTF-8')
+            print(result)
+            lista = result.split(" ")
+            #print(lista)
+            device=Num()
+            length=len(lista)
+            for i in range(length):
+            
+                if lista[i]=="rssi":
+                    device.rssi=int(lista[i+1])
+                    print("tu sam")            
+                if lista[i]=="\nname":
+                    device.name=lista[i+1] 
+                    device.sender="rpi1"
+                    pub.publish(device)
+                    print("tu sam 2")
            # self.d = MyDiscoverer()
             #self.d.find_devices(lookup_names = True)
            # found_device = self.d.process_event()
