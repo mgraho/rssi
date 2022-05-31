@@ -51,7 +51,7 @@ class Rssi():
                     print("tu sam")            
                 if lista[i]=="\nname":
                     device.name=lista[i+1] 
-                    device.sender="rpi0"
+                    device.sender=self.name
                     print(self.name)
                     pub.publish(device)
                     print("tu sam 2")
