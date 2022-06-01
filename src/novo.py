@@ -11,14 +11,20 @@ class Rssi():
     def callback(self,data):
         self.pose=data
         if data.name.find("rpi")!=-1:
-            if data.name.find("rpi0")!=-1:
-                rpix=0
-            if data.name.find("rpi1")!=-1:
-                rpix=1
-            if data.name.find("rpi2")!=-1:
-                rpix=2
+           # if data.name.find("rpi0")!=-1:
+           #     rpix=0
+           # if data.name.find("rpi1")!=-1:
+           #     rpix=1
+           # if data.name.find("rpi2")!=-1:
+           #     rpix=2
                 #ime=data.name.replace("rpi", "")
                 #name=ime.replace("\nhci0","")
+            duljina=len(data.name)     
+            for i in range(duljina):
+                if data.name[i]=="r":
+                    if data.name[i+1]=="p":
+                        if data.name[i+2]=="i":
+                            rpix=int(data.name[i+3])
             sender=data.sender.replace("rpi", "")
             #rpix=int(name)
             senderID=int(sender)
