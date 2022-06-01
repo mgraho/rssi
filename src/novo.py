@@ -34,20 +34,24 @@ class Rssi():
         
         
     def __init__(self):
-        n=3
-        self.A = numpy.zeros((n,n))
-        matrix = []
-        for i in range(n):
-            matrix.append([0] * n)
-        print(matrix)
-        print(self.A)
+        #n=3
+        
         self.rate = rospy.Rate(1) #1 hz 
         self.device = Num()
         #rospy.Subscriber("device",Num, self.callback)
         self.config = rospy.get_param('/consensus_params')
         self.name = rospy.get_namespace().strip('/')   
         print(self.name)
+        
         self.index = int(self.config['mapping'].index(self.name))  
+        n=int(self.config['broj_uredaja'])
+        self.A = numpy.zeros((n,n))
+        matrix = []
+        for i in range(n):
+            matrix.append([0] * n)
+        print(matrix)
+        print(self.A)
+        
         #subprocess.run(['sudo','hciconfig','hciX','piscan'])
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
