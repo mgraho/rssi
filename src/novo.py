@@ -7,10 +7,12 @@ from std_msgs.msg import String
 from rssi.msg import Num
 import subprocess
 import numpy
+from scipy.optimize import minimize
 
 class Rssi():
     def callback(self,data):
         self.pose=data
+        callback_number=callback_number+1
         if data.name.find("rpi")!=-1:
            # if data.name.find("rpi0")!=-1:
            #     rpix=0
@@ -27,9 +29,18 @@ class Rssi():
                         if data.name[i+2]=="i":
                             rpix=int(data.name[i+3])
             sender=data.sender.replace("rpi", "")
-            #rpix=int(name)
+            
             senderID=int(sender)
-            self.A[senderID][rpix]=data.rssi
+            temp=self.A[senderID][rpix]+(data.rssi+self.A[senderID][rpix])/2
+            self.A[senderID][rpix]=temp
+            
+            
+        if callback_number>10
+            #matrica_za_testiranje=
+            x0=numpy.zeros((1,n*2-3))
+            #sol=minimize(objective,x0
+            #print(sol.fun)
+        
         print("A=", self.A)
         
         
@@ -46,12 +57,13 @@ class Rssi():
         self.index = int(self.config['mapping'].index(self.name))  
         n=int(self.config['broj_uredaja'])
         self.A = numpy.zeros((n,n))
+        self.X = numpy.zeros((n,2))
         matrix = []
         for i in range(n):
             matrix.append([0] * n)
         print(matrix)
         print(self.A)
-        
+        callback_number=0 
         #subprocess.run(['sudo','hciconfig','hciX','piscan'])
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
@@ -83,7 +95,25 @@ class Rssi():
 
             self.rate.sleep()
             
-         
+     def objective(x,Y)
+        n = size(Y, 1);
+        X = [0 0; 0 x(1)];
+        X = [X; reshape(x(2:end), 2, [])'];
+
+
+        mse = 0;
+        c = 0;
+        for i=1:n
+            for j=1:n
+                if (i ~= j)
+                    d = norm(X(i,:) - X(j,:));
+                    if Y(i,j) > 0
+                        mse = mse + (d - Y(i, j)) .^ 2;
+                        c = c + 1;
+
+        mse = mse / c;
+
+        return mse
        
 if __name__ == '__main__':
     rospy.init_node('pyclass')
