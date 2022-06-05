@@ -16,7 +16,7 @@ def objective(x):
         n = len(Y)
         #X = [[0, 0] ,[0, x[0]],[x[1], x[2]]]
         X=[[0, 0] ,[0, x[0]]]
-        x=numpy.delete(x,1)
+        x=numpy.delete(x,0)
        # X = [[X],[ numpy.reshape(x,(1,2))]]
         X.append(numpy.reshape(x,(1,2)))
        # print(X)
