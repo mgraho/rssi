@@ -30,7 +30,7 @@ class Rssi():
         print(matrix)
         print(self.A)
         callback_number=0 
-        #subprocess.run(['sudo','hciconfig','hciX','piscan'])
+        subprocess.run(['sudo','hciconfig','hciX','piscan'])
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
         for connected, to in zip(self.config['adjacency'][self.index], self.config['mapping']):
