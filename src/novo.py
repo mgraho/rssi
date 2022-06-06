@@ -10,40 +10,6 @@ import numpy
 from scipy.optimize import minimize
 
 class Rssi():
-    def callback(self,data):
-        self.pose=data
-        callback_number=callback_number+1
-        if data.name.find("rpi")!=-1:
-           # if data.name.find("rpi0")!=-1:
-           #     rpix=0
-           # if data.name.find("rpi1")!=-1:
-           #     rpix=1
-           # if data.name.find("rpi2")!=-1:
-           #     rpix=2
-                #ime=data.name.replace("rpi", "")
-                #name=ime.replace("\nhci0","")
-            duljina=len(data.name)     
-            for i in range(duljina):
-                if data.name[i]=="r":
-                    if data.name[i+1]=="p":
-                        if data.name[i+2]=="i":
-                            rpix=int(data.name[i+3])
-            sender=data.sender.replace("rpi", "")
-            
-            senderID=int(sender)
-            temp=self.A[senderID][rpix]+(data.rssi+self.A[senderID][rpix])/2
-            self.A[senderID][rpix]=temp
-            
-            
-        if callback_number>10
-            #matrica_za_testiranje=
-            x0=numpy.zeros((1,n*2-3))
-            #sol=minimize(objective,x0
-            #print(sol.fun)
-        
-        print("A=", self.A)
-        
-        
     def __init__(self):
         #n=3
         
@@ -70,6 +36,48 @@ class Rssi():
         for connected, to in zip(self.config['adjacency'][self.index], self.config['mapping']):
             if connected:
                 rospy.Subscriber('/{}/device'.format(to), Num, self.callback, queue_size=3)
+                
+                
+    def callback(self,data):
+        self.pose=data
+        callback_number=callback_number+1
+        if data.name.find("rpi")!=-1:
+           # if data.name.find("rpi0")!=-1:
+           #     rpix=0
+           # if data.name.find("rpi1")!=-1:
+           #     rpix=1
+           # if data.name.find("rpi2")!=-1:
+           #     rpix=2
+                #ime=data.name.replace("rpi", "")
+                #name=ime.replace("\nhci0","")
+            duljina=len(data.name)     
+            for i in range(duljina):
+                if data.name[i]=="r":
+                    if data.name[i+1]=="p":
+                        if data.name[i+2]=="i":
+                            rpix=int(data.name[i+3])
+            sender=data.sender.replace("rpi", "")
+            
+            senderID=int(sender)
+            udaljenost=10**((-62-data.rssi)/(10*2))
+            temp=self.A[senderID][rpix]+(udaljenost+self.A[senderID][rpix])/2
+            self.A[senderID][rpix]=temp
+            
+            
+        if callback_number>10:
+            
+            x0=numpy.zeros((1,n*2-3))
+            bnds = ((0, None), (0, None))
+            sol=minimize(objective,x0)
+            est=sol.x
+            X_est=[[0,0],[0,est[0]]]
+            est=numpy.delete(est,0)
+            X_est.append(numpy.reshape(est,(1,2)))
+            print(X_est)
+            #print(sol.fun)
+        
+        print("A=", self.A)
+        
         
     def run(self):
         
@@ -95,25 +103,25 @@ class Rssi():
 
             self.rate.sleep()
             
-     def objective(x,Y)
-        n = size(Y, 1);
-        X = [0 0; 0 x(1)];
-        X = [X; reshape(x(2:end), 2, [])'];
-
-
-        mse = 0;
-        c = 0;
-        for i=1:n
-            for j=1:n
-                if (i ~= j)
-                    d = norm(X(i,:) - X(j,:));
-                    if Y(i,j) > 0
-                        mse = mse + (d - Y(i, j)) .^ 2;
-                        c = c + 1;
-
-        mse = mse / c;
-
+def objective(x):
+        Y=self.A
+        n = len(Y)
+        X=[[0, 0] ,[0, x[0]]]
+        x=numpy.delete(x,0)
+        X.append(numpy.reshape(x,(1,2)))
+        mse = 0
+        c = 0
+        for i in range(n):
+            for j in range(n):
+                if (i != j):
+                    d = numpy.linalg.norm(numpy.subtract(X[i], X[j]))
+                    if Y[i][j] > 0:
+                        
+                        mse = mse + (d - float(Y[i][j]))** 2
+                        c = c + 1
+        mse = mse / c
         return mse
+        
        
 if __name__ == '__main__':
     rospy.init_node('pyclass')
