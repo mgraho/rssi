@@ -99,8 +99,8 @@ class Rssi():
                 if lista[i]=="\nname":
                     device.name=lista[i+1] 
                     device.sender=self.name
-                    
-                    pub.publish(device)
+                    if data.name.find("rpi")!=-1:
+                        pub.publish(device)
 
             self.rate.sleep()
             
