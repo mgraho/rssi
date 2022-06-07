@@ -29,7 +29,7 @@ class Rssi():
             matrix.append([0] * n)
         print(matrix)
         print(self.A)
-        callback_number=0 
+        self.callback_number=0 
         subprocess.run(['sudo','hciconfig','hciX','piscan'])
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
@@ -40,7 +40,7 @@ class Rssi():
                 
     def callback(self,data):
         self.pose=data
-        callback_number=callback_number+1
+        
         if data.name.find("rpi")!=-1:
            # if data.name.find("rpi0")!=-1:
            #     rpix=0
@@ -60,11 +60,12 @@ class Rssi():
             
             senderID=int(sender)
             udaljenost=10**((-62-data.rssi)/(10*2))
-            temp=self.A[senderID][rpix]+(udaljenost+self.A[senderID][rpix])/2
+            temp=(udaljenost+self.A[senderID][rpix])/2
             self.A[senderID][rpix]=temp
+            self.callback_number=self.callback_number+1
             
             
-        if callback_number>10:
+        if self.callback_number>10:
             
             x0=numpy.zeros((1,n*2-3))
             bnds = ((0, None), (0, None))
@@ -103,7 +104,7 @@ class Rssi():
 
             self.rate.sleep()
             
-def objective(x):
+    def objective(x):
         Y=self.A
         n = len(Y)
         X=[[0, 0] ,[0, x[0]]]
