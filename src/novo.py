@@ -69,7 +69,7 @@ class Rssi():
             n = len(self.A)
             x0=numpy.zeros((1,n*2-3))
             bnds = ((0, None), (0, None))
-            sol=minimize(objective,x0)
+            sol=minimize(self.objective,x0)
             est=sol.x
             X_est=[[0,0],[0,est[0]]]
             est=numpy.delete(est,0)
