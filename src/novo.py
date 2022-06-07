@@ -62,6 +62,7 @@ class Rssi():
             udaljenost=10**((-62-data.rssi)/(10*2))
             temp=(udaljenost+self.A[senderID][rpix])/2
             self.A[senderID][rpix]=temp
+            self.A[rpix][senderID]=temp
             self.callback_number=self.callback_number+1
             
             

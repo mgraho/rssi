@@ -13,8 +13,9 @@ class Rssi():
 
     def objective(self,x):
             #Y=[[0,3,4],[3,0,5],[4,5,0]]
-            Y=[[0,6,5],[6,0,5],[5,5,0]]
-            n = len(Y)
+            #Y=[[0,6,5],[6,0,5],[5,5,0]]
+            Y=self.Y
+            n = len(self.Y)
             X=[[0, 0] ,[0, x[0]]]
             x=numpy.delete(x,0)
             X.append(numpy.reshape(x,(1,2)))
@@ -34,11 +35,17 @@ class Rssi():
             return mse
            
     def run(self):
-        self.Y=[[0,6,5],[6,0,5],[5,5,0]]  
+       # self.Y=[[0,6,5],[6,0,5],[5,5,0]]  
+        self.Y=[[0,3.57,1.03],[8,0,1.11],[0.85,1.5,0]]
         self.n=len(self.Y)    
         x0=numpy.zeros((1,self.n*2-3))
+        x0len=len(x0)
+        bnds = ((0, None)*x0len)
+        print(len(bnds))
+        print(len(x0))
+       # sol=minimize(self.objective,x0,bounds=bnds)
         sol=minimize(self.objective,x0)
-        print(sol.fun)
+        #print(sol.fun)
         print(sol.x)
         est=sol.x
         #X_est=[[0,0],[0,est[0]],[est[1],est[2]]]
@@ -55,7 +62,7 @@ if __name__ == '__main__':
     #print (x0)
     bnds = ((0, None), (0, None))
    #sol=minimize(objective,x0,method='SLSQP',bounds=bnds)
-    #sol=minimize(objective,x0)
+    #sol=minimize(objective,x0,bounds=bnds)
     ne = Rssi()
     ne.run()
 
