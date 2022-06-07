@@ -66,7 +66,7 @@ class Rssi():
             
             
         if self.callback_number>10:
-            
+            n = len(self.A)
             x0=numpy.zeros((1,n*2-3))
             bnds = ((0, None), (0, None))
             sol=minimize(objective,x0)
