@@ -104,7 +104,7 @@ class Rssi():
 
             self.rate.sleep()
             
-    def objective(x):
+    def objective(self,x):
         Y=self.A
         n = len(Y)
         X=[[0, 0] ,[0, x[0]]]
