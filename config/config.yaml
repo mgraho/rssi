@@ -2,7 +2,6 @@ mapping:
   - 'rpi0'
   - 'rpi1'
   - 'rpi2'
-  - 'rpi3'
 
 adjacency:
   - [1, 1, 1, 0]
@@ -10,7 +9,5 @@ adjacency:
   - [1, 1, 1, 0]
   - [0, 0, 0, 0]
 
-initial_values:
-  range: [0, 360, 1]  # star, stop, step // if step == 0, range is continuous
 
 broj_uredaja: 3

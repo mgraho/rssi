@@ -59,6 +59,7 @@ class Rssi():
             sender=data.sender.replace("rpi", "")
             
             senderID=int(sender)
+            print(data.rssi)
             udaljenost=10**((-62-data.rssi)/(10*2))
             temp=(udaljenost+self.A[senderID][rpix])/2
             self.A[senderID][rpix]=temp
@@ -111,12 +112,14 @@ class Rssi():
         X=[[0, 0] ,[0, x[0]]]
         x=numpy.delete(x,0)
         X.append(numpy.reshape(x,(1,2)))
+        #print(X)
         mse = 0
         c = 0
         for i in range(n):
             for j in range(n):
                 if (i != j):
                     d = numpy.linalg.norm(numpy.subtract(X[i], X[j]))
+                    #print(d)
                     if Y[i][j] > 0:
                         
                         mse = mse + (d - float(Y[i][j]))** 2
