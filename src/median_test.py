@@ -47,7 +47,8 @@ if __name__ == '__main__':
     matrica[0][4]=rssi
     print(matrica)
     n=2
-    nule=numpy.zeros((n,5))
+    mjerenja=numpy.zeros((n,5))-62
+    print(mjerenja)
     rpix=1
     print(nule)
     

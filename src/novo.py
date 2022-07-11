@@ -24,7 +24,7 @@ class Rssi():
         
         self.index = int(self.config['mapping'].index(self.name))  
         self.n=int(self.config['broj_uredaja'])
-        self.mjerenja=numpy.zeros((self.n*self.n,5))
+        self.mjerenja=numpy.zeros((self.n*self.n,5))-62
         self.A = numpy.zeros((self.n,self.n))
         self.X = numpy.zeros((self.n,2))
         matrix = []
