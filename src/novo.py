@@ -60,7 +60,7 @@ class Rssi():
             for x in range(4):
                 self.mjerenja[senderID*self.n+rpix][x]=self.mjerenja[senderID*self.n+rpix][x+1]
             self.mjerenja[senderID*self.n+rpix][4]=data.rssi
-            print(self.mjerenja)
+            #print(self.mjerenja)
             med=medfilt(self.mjerenja[senderID*self.n+rpix])
             #print(med)
             rssi= round(sum(med)/len(med))
@@ -69,6 +69,9 @@ class Rssi():
             self.A[senderID][rpix]=temp
             self.A[rpix][senderID]=temp
             self.callback_number=self.callback_number+1
+            
+            print("A=", self.A)
+            print("\n")
             
             
         if self.callback_number>10:
@@ -81,10 +84,10 @@ class Rssi():
             est=numpy.delete(est,0)
             X_est.append(numpy.reshape(est,(1,2)))
             print(X_est)
+            print("\n")
             #print(sol.fun)
         
-        print("A=", self.A)
-        
+     
         
     def run(self):
         
