@@ -56,13 +56,13 @@ class Rssi():
             sender=data.sender.replace("rpi", "")
             
             senderID=int(sender)
-            #rint(data.rssi)
+            #print(data.rssi)
             for x in range(4):
                 self.mjerenja[senderID*self.n+rpix][x]=self.mjerenja[0][x+1]
                 self.mjerenja[senderID*self.n+rpix][4]=data.rssi
-            
+            print(self.mjerenja)
             med=medfilt(self.mjerenja[senderID*self.n+rpix])
-            print(med)
+            #print(med)
             rssi= round(sum(med)/len(med))
             udaljenost=10**((-62-rssi)/(10*2))
             temp=(udaljenost+self.A[senderID][rpix])/2
