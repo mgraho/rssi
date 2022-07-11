@@ -64,7 +64,7 @@ class Rssi():
             med=medfilt(self.mjerenja[senderID*self.n+rpix])
             #print(med)
             rssi= round(sum(med)/len(med))
-            udaljenost=10**((-62-rssi)/(10*2))
+            udaljenost=10**((-62-rssi)/(10*3))
             temp=(udaljenost+self.A[senderID][rpix])/2
             self.A[senderID][rpix]=temp
             self.A[rpix][senderID]=temp
