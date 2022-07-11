@@ -92,7 +92,7 @@ class Rssi():
     def run(self):
         
         while not rospy.is_shutdown():
-            print("skeniram")
+            #print("skeniram")
             result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
             result=result.stdout.decode('UTF-8')
             #print(result)
@@ -104,12 +104,12 @@ class Rssi():
             
                 if lista[i]=="rssi":
                     device.rssi=int(lista[i+1])
-                    print(device.rssi)
+                    #print(device.rssi)
                 if lista[i].find("name")!=-1:
                     device.name=lista[i+1] 
                     device.sender=self.name
                     if device.name.find("rpi")!=-1:
-                        print(device.name)
+                        #print(device.name)
                         pub.publish(device)
 
             self.rate.sleep()
