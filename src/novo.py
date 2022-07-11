@@ -58,8 +58,8 @@ class Rssi():
             senderID=int(sender)
             #print(data.rssi)
             for x in range(4):
-                self.mjerenja[senderID*self.n+rpix][x]=self.mjerenja[0][x+1]
-                self.mjerenja[senderID*self.n+rpix][4]=data.rssi
+                self.mjerenja[senderID*self.n+rpix][x]=self.mjerenja[senderID*self.n+rpix][x+1]
+            self.mjerenja[senderID*self.n+rpix][4]=data.rssi
             print(self.mjerenja)
             med=medfilt(self.mjerenja[senderID*self.n+rpix])
             #print(med)
