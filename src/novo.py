@@ -8,6 +8,7 @@ from rssi.msg import Num
 import subprocess
 import numpy
 from scipy.optimize import minimize
+from scipy.signal import medfilt
 
 class Rssi():
     def __init__(self):
@@ -20,16 +21,19 @@ class Rssi():
         self.name = rospy.get_namespace().strip('/')   
         print(self.name)
         
+        
         self.index = int(self.config['mapping'].index(self.name))  
-        n=int(self.config['broj_uredaja'])
-        self.A = numpy.zeros((n,n))
-        self.X = numpy.zeros((n,2))
+        self.n=int(self.config['broj_uredaja'])
+        self.mjerenja=numpy.zeros((self.n*self.n,5))
+        self.A = numpy.zeros((self.n,self.n))
+        self.X = numpy.zeros((self.n,2))
         matrix = []
-        for i in range(n):
-            matrix.append([0] * n)
+        for i in range(self.n):
+            matrix.append([0] * self.n)
         print(matrix)
         print(self.A)
         self.callback_number=0 
+    
         subprocess.run(['sudo','hciconfig','hciX','piscan'])
         pub = rospy.Publisher("device",Num,queue_size=1)
         # Create subscribers.
@@ -42,14 +46,7 @@ class Rssi():
         self.pose=data
         
         if data.name.find("rpi")!=-1:
-           # if data.name.find("rpi0")!=-1:
-           #     rpix=0
-           # if data.name.find("rpi1")!=-1:
-           #     rpix=1
-           # if data.name.find("rpi2")!=-1:
-           #     rpix=2
-                #ime=data.name.replace("rpi", "")
-                #name=ime.replace("\nhci0","")
+
             duljina=len(data.name)     
             for i in range(duljina):
                 if data.name[i]=="r":
@@ -59,8 +56,14 @@ class Rssi():
             sender=data.sender.replace("rpi", "")
             
             senderID=int(sender)
-            print(data.rssi)
-            udaljenost=10**((-62-data.rssi)/(10*2))
+            #rint(data.rssi)
+            for x in range(4):
+                self.mjerenja[senderID*self.n+rpix][x]=self.mjerenja[0][x+1]
+                self.mjerenja[senderID*self.n+rpix][4]=data.rssi
+            
+            med=medfilt(self.mjerenja[senderID*self.n+rpix])
+            rssi= round(sum(med)/len(med))
+            udaljenost=10**((-62-rssi)/(10*2))
             temp=(udaljenost+self.A[senderID][rpix])/2
             self.A[senderID][rpix]=temp
             self.A[rpix][senderID]=temp
@@ -85,7 +88,7 @@ class Rssi():
     def run(self):
         
         while not rospy.is_shutdown():
-
+            print("skeniram")
             result = subprocess.run(['sudo','btmgmt','find'], stdout=subprocess.PIPE)
             result=result.stdout.decode('UTF-8')
             #print(result)
@@ -97,11 +100,12 @@ class Rssi():
             
                 if lista[i]=="rssi":
                     device.rssi=int(lista[i+1])
-                            
-                if lista[i]=="\nname":
+                    print(device.rssi)
+                if lista[i].find("name")!=-1:
                     device.name=lista[i+1] 
                     device.sender=self.name
                     if device.name.find("rpi")!=-1:
+                        print(device.name)
                         pub.publish(device)
 
             self.rate.sleep()

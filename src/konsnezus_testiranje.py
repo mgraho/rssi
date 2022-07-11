@@ -51,9 +51,12 @@ class Rssi():
         #X_est=[[0,0],[0,est[0]],[est[1],est[2]]]
         X_est=[[0,0],[0,est[0]]]
         est=numpy.delete(est,0)
-        X_est.append(numpy.reshape(est,(1,2)))
+        #X_est.append(numpy.reshape(est,(1,2)))
+        proba=numpy.reshape(est,(1,2))
+        print(proba)
+        X_est=X_est+proba
         print(X_est)
-        print(X_est[2])
+        #print(X_est[2])
         
 if __name__ == '__main__':
     Y=[[0,6,5],[6,0,5],[5,5,0]]  
