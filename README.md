@@ -8,5 +8,5 @@
 
 2. Run one one device Roslaunch rssi main.launch
 
-3. Run on every other device rosrun novo.py __ns=:<name of the device>
+3. Run on every other device rosrun novo.py __ns=:`<name of the device>`
 4. When you want to exit, select the window with Raspberries and pres Ctrl-c
